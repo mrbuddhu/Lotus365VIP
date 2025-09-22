@@ -258,6 +258,11 @@
               topLogo.appendChild(img);
               document.body.appendChild(topLogo);
             }
+            // Remove any social/floating icons on login page (WhatsApp etc.)
+            try {
+              var toRemove = document.querySelectorAll('[href*="wa.me"], [href*="whatsapp" i], [src*="whatsapp" i], .social-icons-box, .social, .social-icons, .fixed-whatsapp, .whatsapp, .support-detail');
+              toRemove.forEach(function(n){ n.parentNode && n.parentNode.removeChild(n); });
+            } catch(_) {}
             return true;
           }
           var topBar = document.querySelector('.header-top') || document.querySelector('header, .topbar, .top-bar, .navbar');
