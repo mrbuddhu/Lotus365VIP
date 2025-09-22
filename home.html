@@ -363,11 +363,26 @@
           const pane = q('#inplayPane'); if(pane){ pane.classList.add('active','show'); }
         }
         function insertTab(){
-          const tabs = findNavTabs(); if(!tabs || q('#inplayTab')) return false;
-          const li=document.createElement('li'); li.className='nav-item';
-          const a=document.createElement('a'); a.href='#inplayPane'; a.id='inplayTab'; a.className='nav-link'; a.textContent='INPLAY';
-          a.addEventListener('click', function(e){ e.preventDefault(); buildInplay(); activateInplay(); });
-          li.appendChild(a); tabs.insertBefore(li,tabs.firstChild); return true;
+          const tabs = findNavTabs();
+          if(tabs && !q('#inplayTab')){
+            const li=document.createElement('li'); li.className='nav-item';
+            const a=document.createElement('a'); a.href='#inplayPane'; a.id='inplayTab'; a.className='nav-link'; a.textContent='INPLAY';
+            a.addEventListener('click', function(e){ e.preventDefault(); buildInplay(); activateInplay(); });
+            li.appendChild(a); tabs.insertBefore(li,tabs.firstChild); return true;
+          }
+          // Fallback: create our own simple bar above the first table
+          const center = q('.center-container, .center-main-container, .main-container') || document.body;
+          if(!center || q('#inplayTab')) return false;
+          const bar = document.createElement('div'); bar.style.padding='6px 10px'; bar.style.background='#2c3e50'; bar.style.color='#fff'; bar.style.display='flex'; bar.style.gap='10px'; bar.style.alignItems='center';
+          const btn = document.createElement('button'); btn.id='inplayTab'; btn.textContent='INPLAY'; btn.style.background='#097c93'; btn.style.color='#fff'; btn.style.border='none'; btn.style.padding='6px 10px'; btn.style.cursor='pointer'; btn.style.borderRadius='3px';
+          btn.addEventListener('click', function(){ buildInplay(); activateInplay(); });
+          bar.appendChild(btn);
+          const content = findTabContent() || center;
+          let pane = q('#inplayPane');
+          if(!pane){ pane=document.createElement('div'); pane.id='inplayPane'; pane.style.background='#fff'; pane.style.marginTop='8px'; }
+          center.insertBefore(bar, center.firstChild);
+          center.insertBefore(pane, bar.nextSibling);
+          return true;
         }
         function run(){ if(!insertTab()) return false; return true; }
         if(!run()){
