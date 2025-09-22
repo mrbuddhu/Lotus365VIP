@@ -309,6 +309,61 @@
         }
       })();
     </script>
+    <script>
+      // Center: prepend an INPLAY tab that lists all live games across categories
+      (function addInplayTab(){
+        function q(sel,root){return (root||document).querySelector(sel);} 
+        function qa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel));}
+        function findNavTabs(){
+          return q('.center-container .nav-tabs, .center-main-container .nav-tabs, .main-container .nav-tabs, .nav-tabs');
+        }
+        function findTabContent(){
+          return q('.tab-content, .center-container .tab-content, .main-container .tab-content');
+        }
+        function isLiveRow(tr){
+          if(!tr || tr.querySelector('th')) return false;
+          const txt = (tr.innerText||'').toLowerCase();
+          if(/\blive\b|\binplay\b|in play/.test(txt)) return true;
+          if(tr.querySelector('.live, .inplay, [title*="Live" i], [alt*="Live" i]')) return true;
+          // heuristic: green dot
+          if(qa('svg,circle',tr).some(n=>/green|#0f|#0f0|#03b37f/i.test(n.getAttribute('fill')||''))) return true;
+          return false;
+        }
+        function buildInplay(){
+          const pane = q('#inplayPane') || (function(){
+            const c = findTabContent(); if(!c) return null; const div=document.createElement('div');
+            div.id='inplayPane'; div.className='tab-pane active show'; c.insertBefore(div,c.firstChild); return div;})()
+          if(!pane) return false;
+          pane.innerHTML='';
+          const tables = qa('.tab-pane table, .table', document);
+          const liveRows=[];
+          tables.forEach(t=>{ qa('tr',t).forEach(tr=>{ if(isLiveRow(tr)) liveRows.push(tr.cloneNode(true)); }); });
+          if(!liveRows.length){ pane.innerHTML='<div style="padding:10px">No live games right now.</div>'; return true; }
+          const tbl=document.createElement('table'); tbl.className='table';
+          liveRows.forEach(r=>tbl.appendChild(r)); pane.appendChild(tbl); return true;
+        }
+        function activateInplay(){
+          const tabs = qa('.nav-tabs .nav-link');
+          tabs.forEach(a=>a.classList.remove('active')); qa('.tab-pane').forEach(p=>p.classList.remove('active','show'));
+          const inTab = q('#inplayTab'); if(inTab) inTab.classList.add('active');
+          const pane = q('#inplayPane'); if(pane){ pane.classList.add('active','show'); }
+        }
+        function insertTab(){
+          const tabs = findNavTabs(); if(!tabs || q('#inplayTab')) return false;
+          const li=document.createElement('li'); li.className='nav-item';
+          const a=document.createElement('a'); a.href='#inplayPane'; a.id='inplayTab'; a.className='nav-link'; a.textContent='INPLAY';
+          a.addEventListener('click', function(e){ e.preventDefault(); buildInplay(); activateInplay(); });
+          li.appendChild(a); tabs.insertBefore(li,tabs.firstChild); return true;
+        }
+        function run(){ if(!insertTab()) return false; return true; }
+        if(!run()){
+          const mo=new MutationObserver(()=>{ if(run()) mo.disconnect(); });
+          mo.observe(document.documentElement,{childList:true,subtree:true});
+          window.addEventListener('load', run);
+          document.addEventListener('DOMContentLoaded', run);
+        }
+      })();
+    </script>
     
     <!-- <script>
       // let image = '/assets/images/hosts/' + window.location.hostname + '/logo.png';
