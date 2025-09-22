@@ -368,19 +368,19 @@
         function insertTab(){
           const tabs = findNavTabs();
           if(tabs && !q('#inplayTab')){
-            // Prefer to replace POLITICS tab if present
-            const pol = Array.prototype.find.call(tabs.querySelectorAll('.nav-link, a, button'),
-              el => /\bpolitics\b/i.test((el.textContent||'').trim()));
-            let a;
-            if(pol){
-              a = pol; a.id='inplayTab'; a.textContent='INPLAY'; a.setAttribute('href','#inplayPane');
+            // Prefer to replace the LI that contains 'Politics'
+            const polLi = Array.prototype.find.call(tabs.children, li => /\bpolitics\b/i.test((li.textContent||'').trim()));
+            if(polLi){
+              // clear and create proper anchor
+              polLi.innerHTML='';
+              const a=document.createElement('a'); a.href='#inplayPane'; a.id='inplayTab'; a.className='nav-link'; a.textContent='INPLAY';
               a.addEventListener('click', function(e){ e.preventDefault(); buildInplay(); activateInplay(); });
-              // ensure pane exists at first
+              polLi.appendChild(a);
               if(!q('#inplayPane')){ const c=findTabContent()||tabs.parentNode; const p=document.createElement('div'); p.id='inplayPane'; p.className='tab-pane'; c.insertBefore(p,c.firstChild); }
               return true;
             } else {
               const li=document.createElement('li'); li.className='nav-item';
-              a=document.createElement('a'); a.href='#inplayPane'; a.id='inplayTab'; a.className='nav-link'; a.textContent='INPLAY';
+              const a=document.createElement('a'); a.href='#inplayPane'; a.id='inplayTab'; a.className='nav-link'; a.textContent='INPLAY';
               a.addEventListener('click', function(e){ e.preventDefault(); buildInplay(); activateInplay(); });
               li.appendChild(a); tabs.insertBefore(li,tabs.firstChild); return true;
             }
