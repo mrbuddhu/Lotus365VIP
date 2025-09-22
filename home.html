@@ -278,32 +278,21 @@
       })();
     </script>
     <script>
-      // Left sidebar: append only sports that actually have events visible in the main area
-      (function addSidebarSportsWithData(){
+      // Left sidebar: render ALL supported sports (non-destructive, no removals)
+      (function addSidebarAllSports(){
         var SUPPORTED = ['Cricket','Football','Tennis','Horse Racing','Greyhound Racing','Binary','Kabaddi','Basketball','Baseball','Table Tennis','Volleyball','Ice Hockey','Darts','Futsal','Golf','Badminton','Handball','Snooker','Rugby Union','Rugby League','Hockey','Motor Sports','Formula 1','NASCAR'];
         function normalize(s){return (s||'').toString().trim().toLowerCase();}
         function getSidebar(){return document.querySelector('.left-sidebar .nav, .left-sidebar nav, .left-sidebar ul');}
         function getExistingSet(sidebar){
           return new Set([].map.call(sidebar.querySelectorAll('a, .nav-link, li'), function(el){return normalize(el.textContent);}));
         }
-        function collectSportsFromCenter(){
-          var center = document.querySelector('.center-container, .center-main-container, .main-container');
-          if(!center) return new Set();
-          var text = center.innerText || '';
-          var set = new Set();
-          SUPPORTED.forEach(function(name){ if(new RegExp('\\b'+name.replace(/[-/\\^$*+?.()|[\]{}]/g,'\\$&')+'\\b','i').test(text)) set.add(name); });
-          // Try data attributes too
-          [].forEach.call(center.querySelectorAll('[data-sport]'), function(el){ set.add(el.getAttribute('data-sport')); });
-          return new Set([].map.call(set, normalize));
-        }
         function run(){
           var sidebar = getSidebar();
           if(!sidebar) return false;
           var have = getExistingSet(sidebar);
-          var present = collectSportsFromCenter();
           SUPPORTED.forEach(function(name){
             var key = normalize(name);
-            if(!present.has(key) || have.has(key)) return;
+            if(have.has(key)) return;
             var li = document.createElement('li');
             li.className = 'nav-item';
             var a = document.createElement('a');
