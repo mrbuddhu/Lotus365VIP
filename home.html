@@ -236,6 +236,41 @@
         if (wit) { window.location.href = 'withdrawl.html'; }
       });
     </script>
+    <script>
+      // Safe injection: ensure all supported sport tabs are visible without removing existing ones
+      (function ensureAllSportsTabs() {
+        var SUPPORTED = [
+          'Football','Tennis','Boxing','Cricket','Golf','Beach Volleyball','Table Tennis','Futsal','Horse Racing','eGames','Greyhounds','Trotting','Speedway','Basketball','Moto GP','Chess','Volleyball','Ice Hockey','Equine Sports','Australians Rules','Badminton','Formula 1','NASCAR','Hockey','Supercars','Netball','Surfing','Cycling','Gaelic Sports','Biathlon','Motorbikes','Athletics','Squash','Basketball 3-3','Floorball','Sumo','Virtual Sports','Handball','Politics','Weather','TV Games','Lottery','Bowls','Waterpolo','Alpine Skiing','Sailing','Hurling','Ski Jumping','Bandy','Motor Sports','Baseball','Rugby Union','Rugby League','Curling','Darts','American Football','Snooker','Lotto','Card Cricket','Kabaddi'
+        ];
+        function normalize(s){return (s||'').toString().trim().toLowerCase();}
+        function run(){
+          // Find a nav container that already holds sports tabs
+          var nav = document.querySelector('.sports-tab .nav, .sports-tab, .center-container .nav, .left-sidebar .nav');
+          if(!nav) return false;
+          var existing = new Set([].map.call(nav.querySelectorAll('.nav-link, button, a, li'), function(el){return normalize(el.textContent);}));
+          // Append as plain nav pills if structure exists
+          SUPPORTED.forEach(function(name){
+            var key = normalize(name);
+            if(existing.has(key)) return;
+            var li = document.createElement('li');
+            li.className = 'nav-item';
+            var a = document.createElement('a');
+            a.className = 'nav-link';
+            a.textContent = name;
+            a.href = 'javascript:void(0)';
+            li.appendChild(a);
+            try{ nav.appendChild(li); }catch(_){ /* no-op */ }
+          });
+          return true;
+        }
+        if(!run()){
+          var mo=new MutationObserver(function(){ if(run()) mo.disconnect(); });
+          mo.observe(document.documentElement,{childList:true,subtree:true});
+          window.addEventListener('load',run);
+          document.addEventListener('DOMContentLoaded',run);
+        }
+      })();
+    </script>
     
     <!-- <script>
       // let image = '/assets/images/hosts/' + window.location.hostname + '/logo.png';
