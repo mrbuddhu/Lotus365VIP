@@ -2,7 +2,10 @@
   "version": 2,
   "routes": [
     { "src": "^/$", "dest": "/home.html" },
-    { "src": "^/home/?$", "dest": "/home.html" }
+    { "src": "^/home/?$", "dest": "/home.html" },
+    { "src": "^/login/?$", "dest": "/home.html" },
+    { "src": "^/favicon\.ico$", "dest": "/favicons/6427-images-favicon.png" },
+    { "src": "^(?!/(css|js|images|fonts|favicons)/|.*\.(?:css|js|png|jpg|jpeg|gif|svg|woff2?|eot|ico|map)$).*$", "dest": "/home.html" }
   ]
 }
 
