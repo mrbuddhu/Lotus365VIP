@@ -99,6 +99,34 @@
         });
       })();
     </script>
+    <script>
+      // Globally remove any Politics category/tab/item across the UI
+      (function removePoliticsEverywhere(){
+        function isPoliticsNode(el){
+          if(!el) return false;
+          const txt=(el.textContent||'').trim().toLowerCase();
+          return /^politics$/.test(txt);
+        }
+        function sweep(root){
+          // remove nav links/buttons labeled Politics
+          (root||document).querySelectorAll('.nav-link, a, button, li').forEach(function(n){
+            if(isPoliticsNode(n) || isPoliticsNode(n.firstElementChild)){
+              // remove its LI container if present, else the node itself
+              const li = n.closest('li') || n;
+              if(li && li.parentNode) li.parentNode.removeChild(li);
+            }
+          });
+          // remove tables/panes explicitly titled Politics
+          (root||document).querySelectorAll('.tab-pane, .card, .panel').forEach(function(p){
+            const head = p.querySelector('.card-title,.panel-title,h1,h2,h3,.title');
+            if(isPoliticsNode(head)) p.remove();
+          });
+        }
+        sweep(document);
+        const mo=new MutationObserver(function(m){ sweep(document); });
+        mo.observe(document.documentElement,{childList:true,subtree:true});
+      })();
+    </script>
 
     
     <!-- <style>
