@@ -98,6 +98,11 @@
     <script type="module" crossorigin="" src="js/4816-js-index-I4fyQjMm.js"></script>
     <link rel="stylesheet" crossorigin="" href="css/css-index-BalBFzCb.css">
     <style>
+      /* Override background to grey */
+      :root { --bg-body: #f2f2f2; }
+      body { background-color: var(--bg-body) !important; }
+    </style>
+    <style>
       /* Centered Deposit/Withdrawal in top bar */
       #dwCenter { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: flex; gap: 10px; z-index: 5; }
       #dwCenter .header-desktop-deposit-withdraw-btn span { font-size: 14px; font-weight: 700; padding: 8px 18px; }
