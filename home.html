@@ -114,15 +114,16 @@
         #dwCenter .header-desktop-deposit-withdraw-btn span { font-size: 15px; padding: 10px 22px; }
       }
       @media (max-width: 767.98px) {
-        /* Mobile-first header like lotus365.rocks: logo row, then two large buttons, then search */
-        .header-top, header, .topbar, .top-bar, .navbar { overflow: hidden; padding: 8px 10px; position: relative; min-height: 112px; z-index: 1000; }
+        /* Mobile: logo, then search, then (smaller) buttons, then ticker */
+        .header-top, header, .topbar, .top-bar, .navbar { overflow: hidden; padding: 8px 10px; position: relative; min-height: 126px; z-index: 1000; }
         #dwLeftLogo { position: absolute; left: 38px; top: 8px; transform: none; width: auto; display: block; margin: 0; }
         #dwLeftLogo img { height: 24px; width: auto; }
-        #dwCenter { position: absolute; top: 34px; left: 50%; transform: translateX(-50%); width: calc(100% - 20px); display: flex; justify-content: center; align-items: center; gap: 8px; margin: 0; flex-wrap: nowrap; z-index: 1100; }
+        /* ensure search sits right below the logo */
+        .search-box-container, .search-box { margin-top: 30px !important; }
+        /* buttons below search */
+        #dwCenter { position: absolute; top: 72px; left: 50%; transform: translateX(-50%); width: calc(100% - 20px); display: flex; justify-content: center; align-items: center; gap: 6px; margin: 0; flex-wrap: nowrap; z-index: 1100; }
         #dwCenter .header-desktop-deposit-withdraw-btn { flex: 1 1 50%; }
-        #dwCenter .header-desktop-deposit-withdraw-btn span { display: block; width: 100%; text-align: center; font-size: 16px; padding: 10px 0; }
-        /* push any search box below the buttons */
-        .search-box-container, .search-box { margin-top: 54px !important; }
+        #dwCenter .header-desktop-deposit-withdraw-btn span { display: block; width: 100%; text-align: center; font-size: 14px; padding: 8px 0; }
       }
     </style>
   </head>
