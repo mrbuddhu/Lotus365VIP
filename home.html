@@ -182,7 +182,22 @@
     </script>
     <script>
       (function addDWButtons() {
+        function isLoginView() {
+          try {
+            var hint = (window.location.pathname + ' ' + window.location.hash + ' ' + (document.title||'')).toLowerCase();
+            if (/login|signin|auth/.test(hint)) return true;
+            var text = document.body ? (document.body.innerText||'').toLowerCase() : '';
+            return /login\s*with|username|password/.test(text);
+          } catch(_) { return false; }
+        }
+        function removeInjected() {
+          var a = document.getElementById('dwLeftLogo');
+          var b = document.getElementById('dwCenter');
+          if (a && a.parentNode) a.parentNode.removeChild(a);
+          if (b && b.parentNode) b.parentNode.removeChild(b);
+        }
         function place() {
+          if (isLoginView()) { removeInjected(); return true; }
           var topBar = document.querySelector('.header-top') || document.querySelector('header, .topbar, .top-bar, .navbar');
           if (!topBar) return false;
           if (document.getElementById('navDepositBtn') || document.getElementById('navWithdrawBtn')) return true;
