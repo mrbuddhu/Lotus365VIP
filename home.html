@@ -66,6 +66,39 @@
         }
       })();
     </script>
+    <script>
+      // Map first-row provider logos by alt text to local GIFs
+      (function fixProviderGifs(){
+        var MAP = {
+          'aviator': 'images/aviator.gif',
+          'indian casino': 'images/indian-casino.gif',
+          'ezugi': 'images/ezugi.gif',
+          'evolution': 'images/evolution.gif',
+          'ae sexy': 'images/ae-sexy.gif',
+          'slot game': 'images/slot-game.gif'
+        };
+        function norm(s){return (s||'').toString().trim().toLowerCase();}
+        function trySwap(img){
+          var alt = norm(img.getAttribute('alt'));
+          var path = MAP[alt];
+          if(!path) return;
+          var tried = img.dataset.gifApplied === '1';
+          if(tried) return;
+          img.dataset.gifApplied = '1';
+          img.src = path;
+        }
+        // swap on error for broken external images
+        document.addEventListener('error', function(e){
+          var t = e.target; if(t && t.tagName==='IMG') trySwap(t);
+        }, true);
+        // also attempt once after load for empty/broken sources
+        window.addEventListener('load', function(){
+          document.querySelectorAll('img[alt]').forEach(function(img){
+            if(!img.complete || img.naturalWidth===0) trySwap(img);
+          });
+        });
+      })();
+    </script>
 
     
     <!-- <style>
