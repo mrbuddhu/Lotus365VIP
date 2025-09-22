@@ -239,7 +239,27 @@
           if (b && b.parentNode) b.parentNode.removeChild(b);
         }
         function place() {
-          if (isLoginView()) { removeInjected(); return true; }
+          if (isLoginView()) {
+            // Show logo on login page (centered at top), but no buttons
+            removeInjected();
+            if (!document.getElementById('loginPageLogo')) {
+              var topLogo = document.createElement('div');
+              topLogo.id = 'loginPageLogo';
+              topLogo.style.position = 'fixed';
+              topLogo.style.top = '16px';
+              topLogo.style.left = '50%';
+              topLogo.style.transform = 'translateX(-50%)';
+              topLogo.style.zIndex = '2000';
+              var img = document.createElement('img');
+              img.src = 'images/lotus365.rocks.png';
+              img.alt = 'LOTUS365';
+              img.style.height = '44px';
+              img.style.objectFit = 'contain';
+              topLogo.appendChild(img);
+              document.body.appendChild(topLogo);
+            }
+            return true;
+          }
           var topBar = document.querySelector('.header-top') || document.querySelector('header, .topbar, .top-bar, .navbar');
           if (!topBar) return false;
           if (document.getElementById('navDepositBtn') || document.getElementById('navWithdrawBtn')) return true;
