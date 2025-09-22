@@ -110,7 +110,8 @@
         function sweep(root){
           // remove nav links/buttons labeled Politics
           (root||document).querySelectorAll('.nav-link, a, button, li').forEach(function(n){
-            if(isPoliticsNode(n) || isPoliticsNode(n.firstElementChild)){
+            const t=(n.textContent||'').trim().toLowerCase();
+            if(/^politics$/.test(t) || /^horse\s*racing$/.test(t) || /^greyhound\s*racing$/.test(t) || /^motor\s*sports?$/.test(t) || isPoliticsNode(n.firstElementChild)){
               // remove its LI container if present, else the node itself
               const li = n.closest('li') || n;
               if(li && li.parentNode) li.parentNode.removeChild(li);
@@ -119,7 +120,8 @@
           // remove tables/panes explicitly titled Politics
           (root||document).querySelectorAll('.tab-pane, .card, .panel').forEach(function(p){
             const head = p.querySelector('.card-title,.panel-title,h1,h2,h3,.title');
-            if(isPoliticsNode(head)) p.remove();
+            const ht=(head&&head.textContent||'').trim().toLowerCase();
+            if(/^politics$/.test(ht) || /^horse\s*racing$/.test(ht) || /^greyhound\s*racing$/.test(ht) || /^motor\s*sports?$/.test(ht)) p.remove();
           });
         }
         sweep(document);
@@ -344,7 +346,7 @@
       // Safe injection: ensure all supported sport tabs are visible without removing existing ones
       (function ensureAllSportsTabs() {
         var SUPPORTED = [
-          'Football','Tennis','Boxing','Cricket','Golf','Beach Volleyball','Table Tennis','Futsal','Horse Racing','eGames','Greyhounds','Trotting','Speedway','Basketball','Moto GP','Chess','Volleyball','Ice Hockey','Equine Sports','Australians Rules','Badminton','Formula 1','NASCAR','Hockey','Supercars','Netball','Surfing','Cycling','Gaelic Sports','Biathlon','Motorbikes','Athletics','Squash','Basketball 3-3','Floorball','Sumo','Virtual Sports','Handball','Weather','TV Games','Lottery','Bowls','Waterpolo','Alpine Skiing','Sailing','Hurling','Ski Jumping','Bandy','Motor Sports','Baseball','Rugby Union','Rugby League','Curling','Darts','American Football','Snooker','Lotto','Card Cricket','Kabaddi'
+          'Football','Tennis','Boxing','Cricket','Golf','Beach Volleyball','Table Tennis','Futsal',/* removed Horse Racing */'eGames',/* removed Greyhounds */'Trotting','Speedway','Basketball','Moto GP','Chess','Volleyball','Ice Hockey','Equine Sports','Australians Rules','Badminton','Formula 1','NASCAR','Hockey','Supercars','Netball','Surfing','Cycling','Gaelic Sports','Biathlon','Motorbikes','Athletics','Squash','Basketball 3-3','Floorball','Sumo','Virtual Sports','Handball','Weather','TV Games','Lottery','Bowls','Waterpolo','Alpine Skiing','Sailing','Hurling','Ski Jumping','Bandy',/* removed Motor Sports */'Baseball','Rugby Union','Rugby League','Curling','Darts','American Football','Snooker','Lotto','Card Cricket','Kabaddi'
         ];
         function normalize(s){return (s||'').toString().trim().toLowerCase();}
         function run(){
@@ -378,7 +380,7 @@
     <script>
       // Left sidebar: show only sports that have data (non-destructive)
       (function addSidebarSportsWithData(){
-        var SUPPORTED = ['Cricket','Football','Tennis','Horse Racing','Greyhound Racing','Binary','Kabaddi','Basketball','Baseball','Table Tennis','Volleyball','Ice Hockey','Darts','Futsal','Golf','Badminton','Handball','Snooker','Rugby Union','Rugby League','Hockey','Motor Sports','Formula 1','NASCAR'];
+        var SUPPORTED = ['Cricket','Football','Tennis',/* removed Horse Racing */ /* removed Greyhound Racing */ 'Binary','Kabaddi','Basketball','Baseball','Table Tennis','Volleyball','Ice Hockey','Darts','Futsal','Golf','Badminton','Handball','Snooker','Rugby Union','Rugby League','Hockey',/* removed Motor Sports */ 'Formula 1','NASCAR'];
         function normalize(s){return (s||'').toString().trim().toLowerCase();}
         function getSidebar(){return document.querySelector('.left-sidebar .nav, .left-sidebar nav, .left-sidebar ul');}
         function getExistingSet(sidebar){
