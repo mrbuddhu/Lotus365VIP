@@ -329,7 +329,10 @@
         function q(sel,root){return (root||document).querySelector(sel);} 
         function qa(sel,root){return Array.prototype.slice.call((root||document).querySelectorAll(sel));}
         function findNavTabs(){
-          return q('.center-container .nav-tabs, .center-main-container .nav-tabs, .main-container .nav-tabs, .nav-tabs');
+          // search all nav-tabs, prefer the one that contains POLITICS
+          const tabs = Array.prototype.slice.call(document.querySelectorAll('.nav-tabs'));
+          const withPolitics = tabs.find(t => Array.prototype.some.call(t.querySelectorAll('.nav-link, a, button'), el => /\bpolitics\b/i.test((el.textContent||'').trim())));
+          return withPolitics || tabs[0] || null;
         }
         function findTabContent(){
           return q('.tab-content, .center-container .tab-content, .main-container .tab-content');
@@ -382,19 +385,7 @@
               li.appendChild(a); tabs.insertBefore(li,tabs.firstChild); return true;
             }
           }
-          // Fallback: create our own simple bar above the first table
-          const center = q('.center-container, .center-main-container, .main-container') || document.body;
-          if(!center || q('#inplayTab')) return false;
-          const bar = document.createElement('div'); bar.style.padding='6px 10px'; bar.style.background='#2c3e50'; bar.style.color='#fff'; bar.style.display='flex'; bar.style.gap='10px'; bar.style.alignItems='center';
-          const btn = document.createElement('button'); btn.id='inplayTab'; btn.textContent='INPLAY'; btn.style.background='#097c93'; btn.style.color='#fff'; btn.style.border='none'; btn.style.padding='6px 10px'; btn.style.cursor='pointer'; btn.style.borderRadius='3px';
-          btn.addEventListener('click', function(){ buildInplay(); activateInplay(); });
-          bar.appendChild(btn);
-          const content = findTabContent() || center;
-          let pane = q('#inplayPane');
-          if(!pane){ pane=document.createElement('div'); pane.id='inplayPane'; pane.style.background='#fff'; pane.style.marginTop='8px'; }
-          center.insertBefore(bar, center.firstChild);
-          center.insertBefore(pane, bar.nextSibling);
-          return true;
+          return false;
         }
         function run(){ if(!insertTab()) return false; return true; }
         if(!run()){
