@@ -1,15 +1,7 @@
 {
   "version": 2,
-  "framework": null,
-  "builds": [
-    { "src": "home.html", "use": "@vercel/static" },
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "(css|js|images|fonts|favicons)/.*", "use": "@vercel/static" }
-  ],
   "routes": [
-    { "src": "^/$", "dest": "/home.html" },
-    { "src": "^/(css|js|images|fonts|favicons)/(.+)", "dest": "/$1/$2" },
-    { "src": ".*", "dest": "/home.html" }
+    { "src": "^/$", "dest": "/home.html" }
   ]
 }
 
